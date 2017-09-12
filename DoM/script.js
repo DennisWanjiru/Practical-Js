@@ -1,8 +1,8 @@
 "use strict";
-//Objescts
+
 var todoList = {
     todos: [],
-    displayTodo: function() {
+    displayTodos: function() {
         if (this.todos.length === 0) {
             console.log("Please add Items to your todo List");
         } else {
@@ -11,10 +11,10 @@ var todoList = {
                 if (this.todos[i].completed === true) {
                     console.log("(x)", this.todos[i].todoText);
                 } else {
-                    console.log("( )", this.todos[i].todoText);                    
+                    console.log("( )", this.todos[i].todoText);
                 }
             }
-        }        
+        }
     },
 
     addTodo: function(todoText) {
@@ -22,24 +22,24 @@ var todoList = {
             todoText: todoText,
             completed: false
         });
-        this.displayTodo();
+        this.displayTodos();
     },
 
     changeTodo: function(position, todoText) {
         this.todos[position].todoText = todoText;
-        this.displayTodo();
+        this.displayTodos();
     },
 
     deleteTodo: function(position) {
         this.todos.splice(position, 1);
-        this.displayTodo();
+        this.displayTodos();
     },
 
     toggleTodo: function(position) {
         let todo = this.todos[position];
         todo.completed = !todo.completed;
-        this.displayTodo();
-    }, 
+        this.displayTodos();
+    },
 
     toggleAll: function() {
         var totalTodos = this.todos.length;
@@ -62,18 +62,16 @@ var todoList = {
             }
         }
 
-        this.displayTodo();
+        this.displayTodos();
     }
 };
 
+var handlers = {
+    displayTodos: function() {
+        todoList.displayTodos();
+    },
 
-var displayTodosBtn = document.getElementById("displayTodosBtn");
-var toggleTodosBtn = document.getElementById("toggleTodosBtn");
-
-displayTodosBtn.addEventListener('click', function() {
-    todoList.displayTodo();
-});
-
-toggleTodosBtn.addEventListener('click', function() {
-    todoList.toggleAll();
-});
+    toggleAll: function() {
+        todoList.toggleAll();
+    }
+}
