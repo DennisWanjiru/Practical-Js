@@ -1,44 +1,29 @@
 "use strict";
 
+/*================================
+    --------THE MODEL--------
+================================*/
+
 var todoList = {
     todos: [],
-    displayTodos: function() {
-        if (this.todos.length === 0) {
-            console.log("Please add Items to your todo List");
-        } else {
-            console.log("My Todos: ");
-            for (var i = 0; i < this.todos.length; i++) {
-                if (this.todos[i].completed === true) {
-                    console.log("(x)", this.todos[i].todoText);
-                } else {
-                    console.log("( )", this.todos[i].todoText);
-                }
-            }
-        }
-    },
-
     addTodo: function(todoText) {
         this.todos.push({
             todoText: todoText,
             completed: false
         });
-        this.displayTodos();
     },
 
     changeTodo: function(position, todoText) {
         this.todos[position].todoText = todoText;
-        this.displayTodos();
     },
 
     deleteTodo: function(position) {
         this.todos.splice(position, 1);
-        this.displayTodos();
     },
 
     toggleTodo: function(position) {
         let todo = this.todos[position];
         todo.completed = !todo.completed;
-        this.displayTodos();
     },
 
     toggleAll: function() {
@@ -62,22 +47,72 @@ var todoList = {
             }
         }
 
-        this.displayTodos();
     }
 };
 
+/*================================
+    --------THE CONTROLLER---------
+================================*/
+
 var handlers = {
-    displayTodos: function() {
-        todoList.displayTodos();
-    },
-
-    toggleAll: function() {
-        todoList.toggleAll();
-    },
-
     addTodo: function() {
         var addTodoTextInput = document.querySelector("#addTodoTextInput");
         todoList.addTodo(addTodoTextInput.value);
         addTodoTextInput.value = "";
+        view.displayTodos();
+    },
+
+    changeTodo: function() {
+        var changeTodoPosition = document.querySelector("#changeTodoPosition");
+        var changeTodoTextInput = document.querySelector("#changeTodoTextInput");
+        todoList.changeTodo(changeTodoPosition.valueAsNumber, changeTodoTextInput.value);
+        changeTodoPosition.value = "";
+        changeTodoTextInput.value = "";
+        view.displayTodos();
+    },
+
+    deleteTodo: function() {
+        var deleteTodoPosition = document.querySelector("#deleteTodoPosition");
+        todoList.deleteTodo(deleteTodoPosition.valueAsNumber);
+        deleteTodoPosition.value = "";
+        view.displayTodos();
+    },
+
+    toggleTodo: function() {
+        var toggleTodoPosition = document.querySelector("#toggleTodoPosition");
+        todoList.toggleTodo(toggleTodoPosition.valueAsNumber);
+        toggleTodoPosition.value = "";
+        view.displayTodos();
+    },
+
+    toggleAll: function() {
+        todoList.toggleAll();
+        view.displayTodos();
     }
-}
+};
+
+/*================================
+    --------THE VIEW---------
+================================*/
+
+var view = {
+    displayTodos: function () {
+       var todoUl = document.querySelector('ul');
+       todoUl.innerHTML = "";
+
+        for (var i = 0; i < todoList.todos.length; i++) {
+            var todoLi = document.createElement('li');
+            var todo = todoList.todos[i];
+            var todoTextWithCompletion = "";
+
+            if (todo.completed === true) {
+                todoTextWithCompletion = "(x) " + todo.todoText;
+            } else {
+                todoTextWithCompletion = "( ) " + todo.todoText;
+            }
+
+            todoLi.textContent = todoTextWithCompletion;
+            todoUl.appendChild(todoLi);
+        }
+    }
+};
